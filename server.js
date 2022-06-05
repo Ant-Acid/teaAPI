@@ -1,0 +1,46 @@
+const { request, response } = require('express')
+const express = require('express')
+const app = express()
+const PORT = 8000
+const cors = require('cors')
+
+app.use(cors())
+
+const tea = {
+    'oolong': {
+        'waterTemp': 200,
+        'caffeineLevel': 'over 9000',
+        'type': 'green',
+        'flavor': 'earthy'
+    
+},
+'unknown': {
+    'waterTemp': 0,
+        'caffeineLevel': 'unknown',
+            'type': 'unknown',
+                'flavor': 'unknown'
+},
+
+'matcha': {
+    'waterTemp': 180,
+        'caffeineLevel': 'over 5',
+            'type': 'black',
+                'flavor': 'heavenly'
+}
+}
+
+app.get('/', (request, response) => {
+    response.sendFile(__dirname + '/index.html')
+})
+app.listen(process.env.PORT || PORT, () => {
+    console.log(`The server is running on port ${PORT}`);
+})
+app.get('/api:name', (request, response) => {
+    const teaName = request.params.name.toLowerCase()
+    if (tea[teaName]) {
+        response.json(tea[teaName])
+    } else {
+        response.json(tea['unknown'])
+    }
+    response.json(tea)
+})
